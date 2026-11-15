@@ -73,7 +73,8 @@ def get_ds(config):
     print(f'Max length of source sentence: {max_len_src}')
     print(f'Max length of target sentence: {max_len_tgt}')
 
-    train_dataloader = DataLoader(train_ds, batch_size = config['batch_size'], shuffle=True)
+    # Workers tokenize upcoming batches on the CPU while the GPU trains on the current one
+    train_dataloader = DataLoader(train_ds, batch_size = config['batch_size'], shuffle=True, num_workers=2, persistent_workers=True)
     val_dataloader = DataLoader(val_ds, batch_size=1, shuffle=True)
     return train_dataloader, val_dataloader, tokenizer_src, tokenizer_tgt
 
